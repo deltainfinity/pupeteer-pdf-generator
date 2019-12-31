@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 
-const saveToPdf = async () => {
+const saveToPdf = async (json) => {
+  console.log("json",json);
   // Browser actions & buffer creator
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'] // SEE BELOW WARNING!!!
@@ -9,7 +10,7 @@ const saveToPdf = async () => {
   const page = await browser.newPage()
 
   await page.addScriptTag({ url: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js' })
-  await injectFile(page, require.resolve('../js/report.min.js'))
+  await injectFile(page, require.resolve('../js/assessment-components.min.js'))
 
   var html = `
   <html>
@@ -18,7 +19,17 @@ const saveToPdf = async () => {
   <report-footer></report-footer>
   </body>
   </html>`
-  await page.setContent(html)
+
+  var html1 = `
+  <html>
+  <body>
+    <CSE-IT :reportName = 'CSE-IT' :data ='`
+    var html2 = `'></CSE-IT>
+    </body>
+    </html>`
+  var data = html1+JSON.stringify(json) +html2;
+  console.log('data: ', data);
+  await page.setContent(data)
 
   const pdf = await page.pdf()
   await browser.close()
