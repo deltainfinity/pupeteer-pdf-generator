@@ -2,7 +2,6 @@ const puppeteer = require('puppeteer')
 const fs = require('fs')
 
 const saveToPdf = async (json) => {
-  console.log("json",json);
   // Browser actions & buffer creator
   const browser = await puppeteer.launch({
 
@@ -12,7 +11,8 @@ const saveToPdf = async (json) => {
   const page = await browser.newPage()
 
   await page.addScriptTag({ url: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js' })
-  await injectFile(page, require.resolve('../js/assessment-components.min.js'))
+  // await injectFile(page, require.resolve('../js/assessment-components.min.js'))
+  await injectFile(page, require.resolve('../js/report.js'))
 
   var html = `
   <html>
@@ -58,12 +58,13 @@ const saveToPdf = async (json) => {
   var html1 = `
   <html>
   <body>
-    <CSE-IT :reportName = 'CSE-IT' :data ='`
-    var html2 = `'></CSE-IT>
+    <report-c-s-e-i-t name = 'CSE-IT' data ='`
+  var html2 = `'></report-c-s-e-i-t>
     </body>
     </html>`
-  var data = html1+JSON.stringify(json) +html2;
-  console.log('data: ', data);
+
+  var data = html1 + JSON.stringify(json) + html2;
+  console.log('html: ', data);
   await page.setContent(data)
 
   const pdf = await page.pdf()

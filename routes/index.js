@@ -118,7 +118,7 @@ router.get("/generate-pdf", async (req, res, __) => {
             {
               "QuestionSequenceID": 6,
               "QuestionID": 127355,
-              "Question": "Youth has highly irregular school attendance, including frequent or prolonged tardiness or absences.",
+              "Question": "Youth has highly irregular school attendance including frequent or prolonged tardiness or absences.",
               "Answers": [
                 {
                   "Answer": "No information",
