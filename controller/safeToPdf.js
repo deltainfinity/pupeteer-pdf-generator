@@ -11,66 +11,39 @@ const saveToPdf = async (json) => {
   const page = await browser.newPage()
 
   await page.addScriptTag({ url: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js' })
+
   // await injectFile(page, require.resolve('../js/assessment-components.min.js'))
-  await injectFile(page, require.resolve('../js/report.js'))
+  await injectFile(page, require.resolve('../js/report.min.js'))
 
-  var html = `
-  <html>
-  <body>
-   
-  <report-header report-Name="assessment" user-Data='{ "SubjectLastName": "dude", "SubjectFirstName": "the" }'></report-header>
-  <report-demographics  user-Data='{ "SubjectExternalID": 123, "SORID": "345", "BirthDate":"02/14/1990", "UserLastName": "dude", "UserFirstName": "the" }'></report-demographics>
- 
-  <report-domain-header domain-Header-Name="domain 1">
-    <report-section-header section-Header-Name="section 1"></report-section-header>
-    <report-question-with-single-answers data='{"QuestionSequence":1,"QuestionText":"Question 1", "Answers":[{"AnswerValue":"Answer 1","AnswerImageType":3}]}'></report-question-with-single-answers>
-    <report-question-with-single-answers data='{"QuestionSequence":2,"QuestionText":"Question 2", "Answers":[{"AnswerValue":"Answer 2","AnswerImageType":4}]}'></report-question-with-single-answers>
-    <report-question-with-single-answers data='{"QuestionSequence":3,"QuestionText":"Question 3", "Answers":[{"AnswerValue":"Answer 3","AnswerImageType":5}]}'></report-question-with-single-answers>
-    <report-question-with-single-answers data='{"QuestionSequence":4,"QuestionText":"Question 4", "Answers":[{"AnswerValue":"Answer 4","AnswerImageType":6}]}'></report-question-with-single-answers>
-    <report-section-header section-Header-Name="section 2"></report-section-header>
-    <report-question-with-single-answers data='{"QuestionSequence":1,"QuestionText":"Question 1", "Answers":[{"AnswerValue":"Answer 1","AnswerImageType":3}]}'></report-question-with-single-answers>
-    <report-question-with-single-answers data='{"QuestionSequence":2,"QuestionText":"Question 2", "Answers":[{"AnswerValue":"Answer 2","AnswerImageType":4}]}'></report-question-with-single-answers>
-    <report-question-with-single-answers data='{"QuestionSequence":3,"QuestionText":"Question 3", "Answers":[{"AnswerValue":"Answer 3","AnswerImageType":5}]}'></report-question-with-single-answers>
-    <report-question-with-single-answers data='{"QuestionSequence":4,"QuestionText":"Question 4", "Answers":[{"AnswerValue":"Answer 4","AnswerImageType":6}]}'></report-question-with-single-answers>
-    
-  </report-domain-header>
-
-  <report-domain-header domain-Header-Name="domain 2">
-  <report-section-header section-Header-Name="section 1"></report-section-header>
-  <report-question-with-single-answers data='{"QuestionSequence":1,"QuestionText":"Question 1", "Answers":[{"AnswerValue":"Answer 1","AnswerImageType":3}]}'></report-question-with-single-answers>
-  <report-question-with-single-answers data='{"QuestionSequence":2,"QuestionText":"Question 2", "Answers":[{"AnswerValue":"Answer 2","AnswerImageType":4}]}'></report-question-with-single-answers>
-  <report-question-with-single-answers data='{"QuestionSequence":3,"QuestionText":"Question 3", "Answers":[{"AnswerValue":"Answer 3","AnswerImageType":5}]}'></report-question-with-single-answers>
-  <report-question-with-single-answers data='{"QuestionSequence":4,"QuestionText":"Question 4", "Answers":[{"AnswerValue":"Answer 4","AnswerImageType":6}]}'></report-question-with-single-answers>
-  
-  <report-section-header section-Header-Name="section 2"></report-section-header>
-  <report-question-with-single-answers data='{"QuestionSequence":1,"QuestionText":"Question 1", "Answers":[{"AnswerValue":"Answer 1","AnswerImageType":3}]}'></report-question-with-single-answers>
-  <report-question-with-single-answers data='{"QuestionSequence":2,"QuestionText":"Question 2", "Answers":[{"AnswerValue":"Answer 2","AnswerImageType":4}]}'></report-question-with-single-answers>
-  <report-question-with-single-answers data='{"QuestionSequence":3,"QuestionText":"Question 3", "Answers":[{"AnswerValue":"Answer 3","AnswerImageType":5}]}'></report-question-with-single-answers>
-  <report-question-with-single-answers data='{"QuestionSequence":4,"QuestionText":"Question 4", "Answers":[{"AnswerValue":"Answer 4","AnswerImageType":6}]}'></report-question-with-single-answers>
-  
-  </report-domain-header>
-
-  <report-footer></report-footer>
- 
-  </body>
-  </html>`
-
-  var html1 = `
-  <html>
+  var headerTemplate = "<report-header reportName='CSE-IT' data ='" + JSON.stringify(json) + "/>";
+  var footerTemplate = " <report-footer/>";
+  var html1 = `<html>
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <body>
     <report-c-s-e-i-t name = 'CSE-IT' data ='`
-  var html2 = `'></report-c-s-e-i-t>
-    </body>
-    </html>`
+  var html2 = `'/></body></html>`
 
   var data = html1 + JSON.stringify(json) + html2;
-  console.log('html: ', data);
-  await page.setContent(data)
+  await page.setContent(html);
+  await page.addStyleTag({ url: 'https://unpkg.com/bootstrap/dist/css/bootstrap.min.css' })
+  await page.addStyleTag({ url: 'https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css' })
+  await page.addStyleTag({ url: 'https://fonts.googleapis.com/css?family=Roboto&display=swap' })
 
-  const pdf = await page.pdf()
+  function test() {
+    return '<report-footer></report-footer>';
+  }
+  const pdf = await page.pdf({
+    format: 'A4',
+    headerTemplate: test(),
+    // footerTemplate: '<span style="font-size: 10px; width: 5px; height: 5px; background-color: red; color:black; margin: 20px;">Footer</span>',
+    displayHeaderFooter: true,
+    printBackground: true,
+    ///padding: { top: 40, bottom: 40 }
+  });
+
   await browser.close()
-
   return pdf
+
 }
 
 /** ****************** WARNING ********************* WARNING ********************* WARNING *********************
@@ -82,7 +55,7 @@ const saveToPdf = async (json) => {
 
 ******************** WARNING ********************* WARNING ********************* WARNING *********************/
 
-async function injectFile (page, filePath) {
+async function injectFile(page, filePath) {
   let contents = await new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) return reject(err)

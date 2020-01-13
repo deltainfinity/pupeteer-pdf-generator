@@ -268,7 +268,7 @@ router.get("/generate-pdf", async (req, res, __) => {
             {
               "QuestionSequenceID": 14,
               "QuestionID": 127364,
-              "Question": "Youth has tattoos, scarring or branding, indicating being treated as someone's property.",
+              "Question": "Youth has tattoos, scarring or branding, indicating being treated as someones property.",
               "Answers": [
                 {
                   "Answer": "Possible Concern",
@@ -336,7 +336,7 @@ router.get("/generate-pdf", async (req, res, __) => {
             {
               "QuestionSequenceID": 18,
               "QuestionID": 127368,
-              "Question": "Youth's substance use impacts their health or interferes with their ability to function.",
+              "Question": "Youths substance use impacts their health or interferes with their ability to function.",
               "Answers": [
                 {
                   "Answer": "No information",
@@ -687,7 +687,7 @@ router.get("/generate-pdf", async (req, res, __) => {
             {
               "QuestionSequenceID": 37,
               "QuestionID": 127388,
-              "Question": "Someone else is controlling the youth's contact with family or friends, leaving the youth socially isolated.",
+              "Question": "Someone else is controlling the youths contact with family or friends, leaving the youth socially isolated.",
               "Answers": [
                 {
                   "Answer": "Clear Concern",
