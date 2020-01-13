@@ -20,11 +20,12 @@ const saveToPdf = async (json) => {
   var html1 = `<html>
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <body>
+  
     <report-c-s-e-i-t name = 'CSE-IT' data ='`
   var html2 = `'/></body></html>`
 
   var data = html1 + JSON.stringify(json) + html2;
-  await page.setContent(html);
+  await page.setContent(data);
   await page.addStyleTag({ url: 'https://unpkg.com/bootstrap/dist/css/bootstrap.min.css' })
   await page.addStyleTag({ url: 'https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css' })
   await page.addStyleTag({ url: 'https://fonts.googleapis.com/css?family=Roboto&display=swap' })
